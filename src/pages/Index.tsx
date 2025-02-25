@@ -4,6 +4,7 @@ import { LoginForm } from "@/components/LoginForm";
 import { Dashboard } from "@/components/Dashboard";
 import { Navigation } from "@/components/Navigation";
 import { supabase } from "@/lib/supabaseClient";
+import { Toaster } from "@/components/ui/toaster";
 
 const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -36,6 +37,7 @@ const Index = () => {
       ) : (
         <LoginForm />
       )}
+      <Toaster />
     </div>
   );
 };
