@@ -7,17 +7,25 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-[#f8f9fa] to-[#e9ecef] min-h-screen font-['Inter'];
+    @apply bg-gradient-to-br from-[#f8f9fa] to-[#e9ecef] min-h-screen font-['Inter'] dark:from-gray-900 dark:to-gray-800;
+  }
+
+  .dark body {
+    @apply text-white;
+  }
+
+  .dark .glass-card {
+    @apply backdrop-blur-xl bg-gray-800/90 border-gray-700 shadow-lg shadow-primary/20;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-lg bg-white/80 border border-white/20 shadow-lg;
+    @apply backdrop-blur-lg bg-white/80 border border-white/20 shadow-lg transition-all duration-200;
   }
   
   .nav-item {
-    @apply px-4 py-2 rounded-lg transition-all duration-200 hover:bg-primary/10 text-gray-700 hover:text-primary;
+    @apply px-4 py-2 rounded-lg transition-all duration-200 hover:bg-primary/10 text-gray-700 hover:text-primary dark:text-gray-200 dark:hover:bg-primary/20;
   }
   
   .btn-primary {
@@ -27,4 +35,20 @@
   .input-field {
     @apply px-4 py-3 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all duration-200;
   }
+}
+
+.dark input, .dark select, .dark textarea {
+  @apply bg-gray-800 border-gray-700 text-white;
+}
+
+.dark .glass-card {
+  box-shadow: 0 0 20px rgba(155, 135, 245, 0.2);
+}
+
+.dark .nav-item:hover {
+  box-shadow: 0 0 15px rgba(155, 135, 245, 0.3);
+}
+
+.dark button:not(.nav-item) {
+  text-shadow: 0 0 10px rgba(155, 135, 245, 0.5);
 }
