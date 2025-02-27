@@ -9,8 +9,13 @@ import { Toaster } from "@/components/ui/toaster";
 const Index = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [session, setSession] = useState(null);
+  const [isResetPassword, setIsResetPassword] = useState(false);
 
   useEffect(() => {
+    // Check if we're in a password reset flow
+    const hash = window.location.hash;
+    setIsResetPassword(hash.includes('type=recovery'));
+
     // Check active sessions and subscribe to auth changes
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
