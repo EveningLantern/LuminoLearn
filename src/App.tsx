@@ -12,6 +12,8 @@ import Quiz from "./pages/Quiz";
 import Progress from "./pages/Progress";
 import Schedule from "./pages/Schedule";
 import Forum from "./pages/Forum";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/progress" element={<Progress />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/forum" element={<Forum />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
