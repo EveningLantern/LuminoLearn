@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { Search, ArrowRight, Clock, User } from "lucide-react";
+import { Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ClassList } from "@/components/doubt-clearing/ClassList";
 import { ClassRoom } from "@/components/doubt-clearing/ClassRoom";
 import { TeacherControls } from "@/components/doubt-clearing/TeacherControls";
+import { PageHeader } from "@/components/PageHeader";
 
 export const DoubtClearing = () => {
   const [userRole, setUserRole] = useState<"student" | "teacher" | null>(null);
@@ -29,9 +30,10 @@ export const DoubtClearing = () => {
         {!activeClass ? (
           <>
             <div className="flex flex-col md:flex-row justify-between items-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-800 mb-4 md:mb-0">
-                Doubt Clearing Sessions
-              </h1>
+              <PageHeader 
+                title="Doubt Clearing Sessions"
+                description="Get instant help with your academic questions"
+              />
               {userRole === "teacher" && <TeacherControls />}
             </div>
 

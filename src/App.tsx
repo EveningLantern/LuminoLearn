@@ -7,6 +7,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import DoubtClearing from "./pages/DoubtClearing";
+import TeacherConnect from "./pages/TeacherConnect";
+import Quiz from "./pages/Quiz";
+import Progress from "./pages/Progress";
+import Schedule from "./pages/Schedule";
+import Forum from "./pages/Forum";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +24,11 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/doubts" element={<DoubtClearing />} />
+          <Route path="/connect" element={<TeacherConnect />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/progress" element={<Progress />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/forum" element={<Forum />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
