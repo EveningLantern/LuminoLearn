@@ -1,7 +1,9 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
+import { User, UserCog } from "lucide-react";
 
 type UserRole = "student" | "teacher" | null;
 type FormView = "login" | "register" | "forgot-password" | "reset-password";
@@ -18,6 +20,14 @@ export const LoginForm = () => {
     name: "",
     resetToken: ""
   });
+  
+  useEffect(() => {
+    // Check if we're in a password reset flow
+    const hash = window.location.hash;
+    if (hash.includes('type=recovery')) {
+      setFormView("reset-password");
+    }
+  }, []);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -95,6 +105,15 @@ export const LoginForm = () => {
     
     if (formView === "register") {
       // Registration validation
+      if (!role) {
+        toast({
+          title: "Error",
+          description: "Please select a role (Student or Teacher)",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       if (formData.password !== formData.confirmPassword) {
         toast({
           title: "Error",
@@ -302,6 +321,129 @@ export const LoginForm = () => {
     </motion.form>
   );
 
+  const renderRegisterForm = () => (
+    <motion.form 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="space-y-4"
+      onSubmit={handleSubmit}
+    >
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Full Name
+        </label>
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          className="input-field w-full"
+          placeholder="Enter your full name"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Email
+        </label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className="input-field w-full"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          ID Number
+        </label>
+        <input
+          type="text"
+          name="id"
+          value={formData.id}
+          onChange={handleInputChange}
+          className="input-field w-full"
+          placeholder="Enter your ID number"
+          required
+        />
+      </div>
+
+      <div className="flex gap-4">
+        <button
+          type="button"
+          onClick={() => setRole("student")}
+          className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all ${
+            role === "student" 
+              ? "bg-primary text-white" 
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          <User size={18} />
+          Student
+        </button>
+        <button
+          type="button"
+          onClick={() => setRole("teacher")}
+          className={`flex-1 py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all ${
+            role === "teacher" 
+              ? "bg-primary text-white" 
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          }`}
+        >
+          <UserCog size={18} />
+          Teacher
+        </button>
+      </div>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Password
+        </label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleInputChange}
+          className="input-field w-full"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Confirm Password
+        </label>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleInputChange}
+          className="input-field w-full"
+          placeholder="Confirm your password"
+          required
+        />
+      </div>
+      
+      <button type="submit" className="w-full btn-primary">
+        Create Account
+      </button>
+      
+      <button
+        type="button"
+        onClick={() => setFormView("login")}
+        className="w-full text-sm text-primary hover:text-primary-hover"
+      >
+        Already have an account? Login
+      </button>
+    </motion.form>
+  );
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <motion.div 
@@ -319,42 +461,14 @@ export const LoginForm = () => {
             : "Welcome Back"}
         </h2>
         
-        {formView === "forgot-password" ? (
-          renderForgotPasswordForm()
-        ) : formView === "reset-password" ? (
-          renderResetPasswordForm()
-        ) : !role ? (
-          <div className="space-y-4">
-            <button
-              onClick={() => {
-                setRole("student");
-                setFormView(formView);
-              }}
-              className="w-full btn-primary mb-4"
-            >
-              {formView === "register" ? "Register as Student" : "Login as Student"}
-            </button>
-            <button
-              onClick={() => {
-                setRole("teacher");
-                setFormView(formView);
-              }}
-              className="w-full btn-primary bg-secondary hover:bg-secondary-hover"
-            >
-              {formView === "register" ? "Register as Teacher" : "Login as Teacher"}
-            </button>
-            {formView === "login" && (
-              <button
-                onClick={() => setFormView("register")}
-                className="w-full text-sm text-primary hover:text-primary-hover mt-4"
-              >
-                Don't have an account? Register now
-              </button>
-            )}
-          </div>
-        ) : (
-          formView === "login" ? renderLoginForm() : renderForgotPasswordForm()
-        )}
+        {formView === "forgot-password" 
+          ? renderForgotPasswordForm()
+          : formView === "reset-password" 
+          ? renderResetPasswordForm()
+          : formView === "register"
+          ? renderRegisterForm()
+          : renderLoginForm()
+        }
       </motion.div>
     </div>
   );
