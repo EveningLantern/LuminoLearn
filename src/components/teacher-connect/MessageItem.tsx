@@ -1,6 +1,6 @@
 
 import { Avatar } from "@/components/ui/avatar";
-import { File, bot, user, userRound } from "lucide-react";
+import { File, Bot, User, UserRound } from "lucide-react";
 
 interface Attachment {
   name: string;
@@ -29,9 +29,9 @@ export const MessageItem = ({
   attachment
 }: MessageItemProps) => {
   const getAvatar = (isAI: boolean, senderId: string) => {
-    if (isAI) return <bot className="text-blue-500" />;
-    if (senderId === userId) return <userRound className="text-primary" />;
-    return <user className="text-secondary" />;
+    if (isAI) return <Bot className="text-blue-500" />;
+    if (senderId === userId) return <UserRound className="text-primary" />;
+    return <User className="text-secondary" />;
   };
 
   return (

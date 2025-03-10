@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { teachers, sampleChats } from "@/utils/teacherData";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, user } from "lucide-react";
+import { ArrowLeft, User } from "lucide-react";
 import { MessageList } from "./MessageList";
 import { ChatInput } from "./ChatInput";
 
@@ -158,7 +158,7 @@ export const ChatInterface = () => {
         
         <div className="flex items-center mb-6">
           <Avatar className="w-12 h-12 border-2 border-primary">
-            <user className="w-8 h-8 text-primary" />
+            <User className="w-8 h-8 text-primary" />
           </Avatar>
           <div>
             <h2 className="text-xl font-semibold">{teacher?.name}</h2>
