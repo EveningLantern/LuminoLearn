@@ -1,6 +1,5 @@
-
 import { useState, useEffect } from "react";
-import { Menu, User, LogOut, Settings, Bell, Student, UserCog } from "lucide-react";
+import { Menu, User, LogOut, Settings, Bell, UserCog } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
