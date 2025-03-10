@@ -56,11 +56,12 @@ export const ChatInterface = () => {
       if (foundTeacher) {
         setTeacher(foundTeacher);
       }
-    }
-    
-    const chatKey = `student-teacher-${teacherId}`;
-    if (sampleChats[chatKey]) {
-      setMessages(sampleChats[chatKey]);
+      
+      // Load sample chats based on teacherId
+      const chatKey = `student-teacher-${teacherId}`;
+      if (sampleChats[chatKey]) {
+        setMessages(sampleChats[chatKey]);
+      }
     }
   }, [teacherId]);
   
@@ -160,7 +161,7 @@ export const ChatInterface = () => {
           <Avatar className="w-12 h-12 border-2 border-primary">
             <User className="w-8 h-8 text-primary" />
           </Avatar>
-          <div>
+          <div className="ml-4">
             <h2 className="text-xl font-semibold">{teacher?.name}</h2>
             <p className="text-sm text-gray-600 dark:text-gray-300">{teacher?.subject}</p>
           </div>
