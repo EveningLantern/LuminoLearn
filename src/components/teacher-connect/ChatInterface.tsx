@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Avatar } from "@/components/ui/avatar";
@@ -8,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { teachers, sampleChats } from "@/utils/teacherData";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Paperclip, Image, ArrowLeft, Bot, File } from "lucide-react";
+import { Send, Paperclip, ImageIcon, ArrowLeft, Robot, File, UserRound, User } from "lucide-react";
 
 interface Message {
   id: number;
@@ -40,8 +39,13 @@ export const ChatInterface = () => {
   const [userName, setUserName] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const getAvatar = (isAI: boolean, senderId: string) => {
+    if (isAI) return <Robot className="text-blue-500" />;
+    if (senderId === userId) return <UserRound className="text-primary" />;
+    return <User className="text-secondary" />;
+  };
+
   useEffect(() => {
-    // Scroll to bottom of messages
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
@@ -57,7 +61,6 @@ export const ChatInterface = () => {
     
     getUserData();
     
-    // Find the teacher data
     if (teacherId) {
       const foundTeacher = teachers.find(t => t.id === parseInt(teacherId));
       if (foundTeacher) {
@@ -65,7 +68,6 @@ export const ChatInterface = () => {
       }
     }
     
-    // Load sample chat history
     const chatKey = `student-teacher-${teacherId}`;
     if (sampleChats[chatKey]) {
       setMessages(sampleChats[chatKey]);
@@ -96,7 +98,6 @@ export const ChatInterface = () => {
     setNewMessage("");
     setSelectedFile(null);
     
-    // Simulate AI assistant response
     if (userRole === "student") {
       setTimeout(() => {
         const aiResponse: Message = {
@@ -139,7 +140,6 @@ export const ChatInterface = () => {
   const handleSubmitHomework = () => {
     setIsSubmitting(true);
     
-    // Simulate file submission
     setTimeout(() => {
       setIsSubmitting(false);
       toast({
@@ -147,7 +147,6 @@ export const ChatInterface = () => {
         description: "Your teacher will review it soon",
       });
       
-      // Add a system message about the submission
       const systemMsg: Message = {
         id: messages.length + 1,
         senderId: "system",
@@ -192,12 +191,12 @@ export const ChatInterface = () => {
         </Button>
         
         <div className="flex items-center mb-6">
-          <Avatar className="w-12 h-12 border-2 border-primary mr-4">
-            <img src={teacher.image} alt={teacher.name} />
+          <Avatar className="w-12 h-12 border-2 border-primary">
+            <User className="w-8 h-8 text-primary" />
           </Avatar>
           <div>
-            <h2 className="text-xl font-semibold">{teacher.name}</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-300">{teacher.subject}</p>
+            <h2 className="text-xl font-semibold">{teacher?.name}</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300">{teacher?.subject}</p>
           </div>
         </div>
         
@@ -210,17 +209,19 @@ export const ChatInterface = () => {
                   message.senderId === userId ? 'bg-primary/10 border-primary/20 border' : 'bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
                 }`}>
                   <div className="flex items-center gap-2 mb-1">
-                    {message.isAI && <Bot className="w-4 h-4 text-blue-500" />}
+                    <Avatar className="w-6 h-6">
+                      {getAvatar(message.isAI, message.senderId)}
+                    </Avatar>
                     <span className="font-medium text-sm">{message.senderName}</span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
                       {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </div>
                   
-                  <p className="whitespace-pre-wrap">{message.content}</p>
+                  <p className="whitespace-pre-wrap ml-8">{message.content}</p>
                   
                   {message.attachment && (
-                    <div className="mt-2 p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
+                    <div className="mt-2 ml-8 p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
                       {message.attachment.type === 'image' ? (
                         <div>
                           <img 
@@ -248,7 +249,7 @@ export const ChatInterface = () => {
             <div className="p-2 mb-2 bg-primary/5 rounded-md flex justify-between items-center">
               <div className="flex items-center gap-2 text-sm">
                 {selectedFile.type.includes('image') ? (
-                  <Image className="w-4 h-4" />
+                  <ImageIcon className="w-4 h-4" />
                 ) : (
                   <File className="w-4 h-4" />
                 )}
@@ -280,7 +281,7 @@ export const ChatInterface = () => {
               onClick={() => handleFileButtonClick('image')}
               title="Attach Image"
             >
-              <Image className="h-4 w-4" />
+              <ImageIcon className="h-4 w-4" />
             </Button>
             
             <input
