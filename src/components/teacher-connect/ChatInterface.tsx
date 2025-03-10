@@ -1,13 +1,15 @@
-import { useState, useRef, useEffect } from "react";
+
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { teachers, sampleChats } from "@/utils/teacherData";
 import { supabase } from "@/lib/supabaseClient";
 import { useToast } from "@/hooks/use-toast";
-import { Send, Paperclip, ImageIcon, ArrowLeft, Robot, File, UserRound, User } from "lucide-react";
+import { ArrowLeft, user } from "lucide-react";
+import { MessageList } from "./MessageList";
+import { ChatInput } from "./ChatInput";
 
 interface Message {
   id: number;
@@ -27,7 +29,6 @@ export const ChatInterface = () => {
   const { teacherId } = useParams<{ teacherId: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -37,17 +38,6 @@ export const ChatInterface = () => {
   const [userRole, setUserRole] = useState<"student" | "teacher" | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const getAvatar = (isAI: boolean, senderId: string) => {
-    if (isAI) return <Robot className="text-blue-500" />;
-    if (senderId === userId) return <UserRound className="text-primary" />;
-    return <User className="text-secondary" />;
-  };
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -113,30 +103,6 @@ export const ChatInterface = () => {
     }
   };
   
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-  
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
-      toast({
-        title: "File selected",
-        description: `${e.target.files[0].name} ready to send`,
-      });
-    }
-  };
-  
-  const handleFileButtonClick = (type: 'image' | 'file') => {
-    if (fileInputRef.current) {
-      fileInputRef.current.accept = type === 'image' ? 'image/*' : '.pdf,.doc,.docx,.txt,.zip';
-      fileInputRef.current.click();
-    }
-  };
-
   const handleSubmitHomework = () => {
     setIsSubmitting(true);
     
@@ -192,7 +158,7 @@ export const ChatInterface = () => {
         
         <div className="flex items-center mb-6">
           <Avatar className="w-12 h-12 border-2 border-primary">
-            <User className="w-8 h-8 text-primary" />
+            <user className="w-8 h-8 text-primary" />
           </Avatar>
           <div>
             <h2 className="text-xl font-semibold">{teacher?.name}</h2>
@@ -201,121 +167,18 @@ export const ChatInterface = () => {
         </div>
         
         <Card className="glass-card p-4 h-[calc(100vh-250px)] flex flex-col">
-          <div className="flex-1 overflow-y-auto mb-4 space-y-4 p-2">
-            {messages.map((message) => (
-              <div key={message.id} className={`flex ${message.senderId === userId ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] rounded-lg p-3 ${
-                  message.isAI ? 'bg-blue-100 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 border' : 
-                  message.senderId === userId ? 'bg-primary/10 border-primary/20 border' : 'bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
-                }`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <Avatar className="w-6 h-6">
-                      {getAvatar(message.isAI, message.senderId)}
-                    </Avatar>
-                    <span className="font-medium text-sm">{message.senderName}</span>
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                      {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                  </div>
-                  
-                  <p className="whitespace-pre-wrap ml-8">{message.content}</p>
-                  
-                  {message.attachment && (
-                    <div className="mt-2 ml-8 p-2 bg-white dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-700">
-                      {message.attachment.type === 'image' ? (
-                        <div>
-                          <img 
-                            src={message.attachment.url} 
-                            alt="Attachment" 
-                            className="max-h-40 rounded"
-                          />
-                          <p className="text-xs mt-1 text-gray-500">{message.attachment.name}</p>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <File className="w-5 h-5 text-primary" />
-                          <span className="text-sm">{message.attachment.name}</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
+          <MessageList messages={messages} userId={userId} />
           
-          {selectedFile && (
-            <div className="p-2 mb-2 bg-primary/5 rounded-md flex justify-between items-center">
-              <div className="flex items-center gap-2 text-sm">
-                {selectedFile.type.includes('image') ? (
-                  <ImageIcon className="w-4 h-4" />
-                ) : (
-                  <File className="w-4 h-4" />
-                )}
-                <span className="truncate max-w-[200px]">{selectedFile.name}</span>
-              </div>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setSelectedFile(null)}
-              >
-                Remove
-              </Button>
-            </div>
-          )}
-          
-          <div className="flex gap-2">
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => handleFileButtonClick('file')}
-              title="Attach File"
-            >
-              <Paperclip className="h-4 w-4" />
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="icon"
-              onClick={() => handleFileButtonClick('image')}
-              title="Attach Image"
-            >
-              <ImageIcon className="h-4 w-4" />
-            </Button>
-            
-            <input
-              type="file"
-              ref={fileInputRef}
-              className="hidden"
-              onChange={handleFileSelect}
-            />
-            
-            <Input
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
-              className="flex-1"
-            />
-            
-            <Button onClick={handleSendMessage}>
-              <Send className="h-4 w-4" />
-            </Button>
-          </div>
-          
-          {userRole === "student" && (
-            <div className="mt-4 text-center">
-              <Button 
-                onClick={handleSubmitHomework}
-                disabled={isSubmitting}
-                variant="outline"
-                className="w-full"
-              >
-                {isSubmitting ? "Submitting..." : "Submit Homework"}
-              </Button>
-            </div>
-          )}
+          <ChatInput
+            newMessage={newMessage}
+            setNewMessage={setNewMessage}
+            selectedFile={selectedFile}
+            setSelectedFile={setSelectedFile}
+            handleSendMessage={handleSendMessage}
+            userRole={userRole}
+            isSubmitting={isSubmitting}
+            handleSubmitHomework={handleSubmitHomework}
+          />
         </Card>
       </div>
     </div>
