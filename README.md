@@ -1,7 +1,3 @@
-Here's an updated README for **LuminoLearn** with the additional details:
-
----
-
 # 🌟 **LuminoLearn**  
 *An Education-Based Platform Connecting Teachers and Students Seamlessly*  
 
