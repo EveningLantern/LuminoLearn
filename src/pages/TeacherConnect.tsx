@@ -25,8 +25,6 @@ const TeacherConnect = () => {
     getUserData();
   }, []);
   
-  const isRootPath = location.pathname === "/connect";
-  
   return (
     <>
       <Navigation />

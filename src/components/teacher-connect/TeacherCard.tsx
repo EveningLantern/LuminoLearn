@@ -18,6 +18,7 @@ export const TeacherCard = ({ id, name, subject, image, description }: TeacherCa
   const navigate = useNavigate();
   
   const handleStartChat = () => {
+    // Ensure we're using the correct path format
     navigate(`/connect/chat/${id}`);
   };
 

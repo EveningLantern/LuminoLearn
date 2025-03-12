@@ -1,8 +1,17 @@
 
+import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/PageHeader";
 import { MessageSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const Forum = () => {
+  const navigate = useNavigate();
+
+  const handleJoinDiscussion = (forumId: string) => {
+    // Navigate to a sample group chat using the forum ID
+    navigate(`/connect/chat/${forumId}`);
+  };
+
   return (
     <div className="min-h-screen pt-24 px-6 pb-6">
       <div className="max-w-7xl mx-auto">
@@ -21,9 +30,12 @@ const Forum = () => {
                   <span>156 discussions</span>
                 </div>
               </div>
-              <button className="bg-primary text-white px-4 py-2 rounded">
+              <Button 
+                onClick={() => handleJoinDiscussion("1")}
+              >
+                <MessageSquare className="mr-2 h-4 w-4" />
                 Join Discussion
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -37,9 +49,12 @@ const Forum = () => {
                   <span>142 discussions</span>
                 </div>
               </div>
-              <button className="bg-primary text-white px-4 py-2 rounded">
+              <Button 
+                onClick={() => handleJoinDiscussion("2")}
+              >
+                <MessageSquare className="mr-2 h-4 w-4" />
                 Join Discussion
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -53,9 +68,12 @@ const Forum = () => {
                   <span>128 discussions</span>
                 </div>
               </div>
-              <button className="bg-primary text-white px-4 py-2 rounded">
+              <Button 
+                onClick={() => handleJoinDiscussion("3")}
+              >
+                <MessageSquare className="mr-2 h-4 w-4" />
                 Join Discussion
-              </button>
+              </Button>
             </div>
           </div>
         </div>
