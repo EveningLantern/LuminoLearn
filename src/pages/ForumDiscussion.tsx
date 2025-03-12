@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Avatar } from "@/components/ui/avatar";
 import { ArrowLeft, MessageSquare, User } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 interface Message {
   id: number;
@@ -109,6 +111,7 @@ const ForumDiscussion = () => {
 
     setMessages([...messages, message]);
     setNewMessage("");
+    toast.success("Message sent successfully");
   };
 
   if (!forumId || !(forumId in sampleMessages)) {
@@ -179,14 +182,14 @@ const ForumDiscussion = () => {
           </div>
           
           <form onSubmit={handleSendMessage} className="flex gap-2">
-            <input
+            <Input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="flex-1"
             />
-            <Button type="submit">
+            <Button type="submit" disabled={!newMessage.trim()}>
               <MessageSquare className="mr-2 h-4 w-4" />
               Send
             </Button>
