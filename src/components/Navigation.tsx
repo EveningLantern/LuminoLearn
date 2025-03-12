@@ -68,7 +68,7 @@ export const Navigation = () => {
         onClick={() => navigate('/')}
         className="text-2xl font-semibold text-primary cursor-pointer hover:opacity-80 transition-opacity"
       >
-        EduConnect
+         LuminoLearn
       </h1>
       
       <div className="flex items-center gap-4">
