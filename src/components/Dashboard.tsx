@@ -60,7 +60,7 @@ export const Dashboard = () => {
           className="text-center mb-12"
         >
           <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Welcome to EduConnect
+            Welcome to  LuminoLearn
           </h1>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
             Your all-in-one platform for seamless learning and collaboration
@@ -97,7 +97,7 @@ export const Dashboard = () => {
           className="mt-12 text-center"
         >
           <p className="text-sm text-gray-500">
-            Need help? Contact support@educonnect.com
+            Need help? Contact support@luminolearn.com
           </p>
         </motion.div>
       </div>
