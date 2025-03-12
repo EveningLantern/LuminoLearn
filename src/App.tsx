@@ -13,6 +13,7 @@ import Quiz from "./pages/Quiz";
 import Progress from "./pages/Progress";
 import Schedule from "./pages/Schedule";
 import Forum from "./pages/Forum";
+import ForumDiscussion from "./pages/ForumDiscussion";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 
@@ -43,6 +44,7 @@ const App = () => {
             <Route path="/progress" element={<Progress />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/forum" element={<Forum />} />
+            <Route path="/forum/discussion/:forumId" element={<ForumDiscussion />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<NotFound />} />
