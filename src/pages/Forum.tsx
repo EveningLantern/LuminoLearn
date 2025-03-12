@@ -1,7 +1,7 @@
 
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/PageHeader";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Forum = () => {
@@ -9,7 +9,8 @@ const Forum = () => {
 
   const handleJoinDiscussion = (forumId: string) => {
     // Navigate to a sample group chat using the forum ID
-    navigate(`/connect/chat/${forumId}`);
+    // This should be a separate group chat for students, not the teacher chat
+    navigate(`/forum/discussion/${forumId}`);
   };
 
   return (
@@ -28,12 +29,15 @@ const Forum = () => {
                 <div className="flex items-center mt-2 text-sm text-gray-500">
                   <MessageSquare className="w-4 h-4 mr-1" />
                   <span>156 discussions</span>
+                  <Users className="w-4 h-4 ml-3 mr-1" />
+                  <span>43 students</span>
                 </div>
               </div>
               <Button 
-                onClick={() => handleJoinDiscussion("1")}
+                onClick={() => handleJoinDiscussion("math")}
+                variant="default"
               >
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <Users className="mr-2 h-4 w-4" />
                 Join Discussion
               </Button>
             </div>
@@ -47,12 +51,15 @@ const Forum = () => {
                 <div className="flex items-center mt-2 text-sm text-gray-500">
                   <MessageSquare className="w-4 h-4 mr-1" />
                   <span>142 discussions</span>
+                  <Users className="w-4 h-4 ml-3 mr-1" />
+                  <span>38 students</span>
                 </div>
               </div>
               <Button 
-                onClick={() => handleJoinDiscussion("2")}
+                onClick={() => handleJoinDiscussion("physics")}
+                variant="default"
               >
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <Users className="mr-2 h-4 w-4" />
                 Join Discussion
               </Button>
             </div>
@@ -66,12 +73,15 @@ const Forum = () => {
                 <div className="flex items-center mt-2 text-sm text-gray-500">
                   <MessageSquare className="w-4 h-4 mr-1" />
                   <span>128 discussions</span>
+                  <Users className="w-4 h-4 ml-3 mr-1" />
+                  <span>31 students</span>
                 </div>
               </div>
               <Button 
-                onClick={() => handleJoinDiscussion("3")}
+                onClick={() => handleJoinDiscussion("chemistry")}
+                variant="default"
               >
-                <MessageSquare className="mr-2 h-4 w-4" />
+                <Users className="mr-2 h-4 w-4" />
                 Join Discussion
               </Button>
             </div>
